@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block main %}
+{% load static %} 
+
+
+
+
+    <!-- <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+        <div class="container-fluid">
+            <div class="page-header-content">
+                <div class="row align-items-center justify-content-between pt-3">
+                    <div class="col-auto mb-3">
+                        <h3 class="page-header-title">
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                            Pacientes: Datos Del Paciente
+                        </font></font></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header> -->
+    <!-- Main page content-->
+    <div class="container mt-4">
+        
+        <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+          <div class="container-fluid">
+              <div class="page-header-content">
+                  <div class="row align-items-center justify-content-between pt-3">
+                      <div class="col-auto mb-3">
+                          <h3 class="page-header-title" style="color: #4E73DF">
+                              <i class="fas fa-fw fa-user-friends"></i>
+                              <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                              Paciente: Datos del paciente
+                          </font></font></h3>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </header>
+      <!-- Account page navigation-->
+      <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    {% if form.errors %}
+                    <div class="alert alert-warning alert-dismissible fade show mt-2" role="alert">
+                        <strong> {{ form.errors | capfirst }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+      <div class="row">
+          <div class="col-xl-4">
+              <!-- Profile picture card-->
+              <div class="card shadow p-0">
+                  <div class="card-header"><font style="vertical-align: inherit; color: #4E73DF;"><font style="vertical-align: inherit;">Foto de perfil</font></font></div>
+                  <div class="card-body text-center">
+                      <!-- Profile picture image-->
+
+                      <img class="img-account-profile rounded-circle mb-2" src="{% static 'imagenes/avatar1.png' %}" alt="Card image" id="preview_foto" style="width: 15rem;">
+                      <!-- Profile picture help block-->
+                      <div class="small font-italic text-muted mb-4"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">JPG o PNG no mayor a 5 MB</font></font></div>
+                      <!-- Profile picture upload button-->
+                      <div class="form-group" onclick="ver( {{form.foto.id_for_label}} )">
+                        {{ form.foto }}
+                    </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="col-xl-8">
+              <!-- Account details card-->
+              <div class="card mb-4 shadow p-0">
+                  <div class="card-header"><font style="vertical-align: inherit; color: #4E73DF;"><font style="vertical-align: inherit;">Información personal</font></font></div>
+                  <div class="card-body">
+            
+                          <!-- Form Group (username)-->
+                          <div class="form-group">
+                              <label class="small mb-1" for="{{form.cedula.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cedula de usuario (cómo aparecerá su nombre para otros usuarios en el sitio)</font></font></label>
+                              {{ form.cedula }}
+                              <!-- <input class="form-control" id="inputUsername" type="text" placeholder="Ingrese su nombre de usuario" value=""> -->
+                          </div>
+                          <!-- Form Row-->
+                          <div class="form-row">
+                              <!-- Form Group (first name)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.nombre.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nombres</font></font></label>
+                                  {{ form.nombre }}
+                              </div>
+                              <!-- Form Group (last name)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.apellido.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Apellido</font></font></label>
+                                  {{ form.apellido }}
+                              </div>
+                          </div>
+                          <!-- Form Row        -->
+                          <div class="form-row">
+                              <!-- Form Group (organization name)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.sexo.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sexo</font></font></label>
+                                  {{ form.sexo }}
+                              </div>
+                              <!-- Form Group (location)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.civil.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Estado civil</font></font></label>
+                                  {{ form.civil }}
+                              </div>
+                          </div>
+                          <!-- Form Group (email address)-->
+                          <div class="form-group">
+                              <label class="small mb-1" for="{{form.email.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dirección de correo electrónico</font></font></label>
+                              {{ form.email }}
+                          </div>
+                          <!-- Form Row-->
+                          <div class="form-row">
+                              <!-- Form Group (phone number)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.telefono.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Número de teléfono</font></font></label>
+                                  {{ form.telefono }}
+                              </div>
+                              <!-- Form Group (birthday)-->
+                              <div class="form-group col-md-6">
+                                  <label class="small mb-1" for="{{form.nacimiento.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Fecha de Nacimiento</font></font></label>
+                                  {{ form.nacimiento }}
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.provincia.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Provincia</font></font></label>
+                                {{ form.provincia }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.ciudad.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Ciudad</font></font></label>
+                                {{ form.ciudad }}
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="small mb-1" for="{{form.direccion.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Dirección del domicilio</font></font></label>
+                            {{ form.direccion }}
+                        </div>
+                        <div class="form-row">
+                            <!-- Form Group (first name)-->
+                            <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.sangre.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tipo de sangre</font></font></label>
+                                {{ form.sangre }}
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.hijos.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cantidad de hijos</font></font></label>
+                                {{ form.hijos }}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.profesion.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Profesion</font></font></label>
+                                {{ form.profesion }}
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="form-group col-md-6">
+                                <label class="small mb-1" for="{{form.titulo.id_for_label}}"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Titulo</font></font></label>
+                                {{ form.titulo }}
+                            </div>
+                        </div>
+                        <div class="form-group form-check">
+                            {{ form.estado }}
+                            <label class="form-check-label" for="{{form.estado.id_for_label}}">Estado</label>
+                        </div>
+                        
+                          <!-- Save changes button-->
+                          <button class="btn btn-primary" type="submit"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Guardar cambios</font></font></button>
+                     
+                  </div>
+              </div>
+          </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block jscript %}
+<script>
+//     function preview(){
+//         const $seleccionArchivos = document.querySelector("#id_logo"),
+//         $imagenPrevisualizacion = document.querySelector("#preview_logo"),
+//         $imagen = document.querySelector("#preview_foto");
+//         $seleccionFoto=document.querySelector("#id_foto");    
+//         $seleccionArchivos.addEventListener("change", () => {   
+//             const objectURL = URL.createObjectURL($seleccionArchivos.files[0]);    
+//             $imagenPrevisualizacion.src = objectURL;
+//         });        
+//         $seleccionFoto.addEventListener("change", () => {   
+//             const objectURL = URL.createObjectURL($seleccionFoto.files[0]);    
+//             $imagen.src = objectURL;
+//         });    
+//     }
+// preview();
+
+    function ver(){
+        // Obtener referencia al input y a la imagen
+
+        const $seleccionArchivos = document.querySelector("#id_foto"),
+        $imagenPrevisualizacion = document.querySelector("#preview_foto");
+
+        // Escuchar cuando cambie
+        $seleccionArchivos.addEventListener("change", () => {
+        // Los archivos seleccionados, pueden ser muchos o uno
+        const archivos = $seleccionArchivos.files;
+        // Si no hay archivos salimos de la función y quitamos la imagen
+        if (!archivos || !archivos.length) {
+            $imagenPrevisualizacion.src = "";
+            return;
+        }
+        // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+        const primerArchivo = archivos[0];
+        // Lo convertimos a un objeto de tipo objectURL
+        const objectURL = URL.createObjectURL(primerArchivo);
+        // Y a la fuente de la imagen le ponemos el objectURL
+        $imagenPrevisualizacion.src = objectURL;
+        });
+    }
+ver();
+</script>
+{% endblock jscript %}
