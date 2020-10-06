@@ -133,8 +133,8 @@ class Paciente(Persona):
         verbose_name_plural = 'Pacientes'
 
     def __str__(self):
-        return '{}'.format(self.nombre)
-
+        return '{} {}'.format(self.nombre, self.apellido)
+     
 
 class Doctor(Persona):
     consultorio = models.CharField('Nombre de Consultorio', max_length=100)

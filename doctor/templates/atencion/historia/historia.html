@@ -1,155 +1,162 @@
 {% extends 'base.html' %}
-{% block main %}
 {% load static %}
+{% block main %}
+
+
 <div class="container-fluid" style="margin-top: 3rem">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Historia clinica</h1>
+        
+        <a href="{% url 'base:paciente' %}" class="d-none d-sm-inline-block btn btn btn-danger shadow-sm"><i class="fas fa-user-md fa-sm text-white-50"></i> Cancelar</a>
+      </div>
     <div class="row">
-        <div class="col">
-            <div class="card ">
-                <div class="row bg-success text-light p-0">
-                    <div class="col-md-8 mt-3">
-                        <h3 class=" ml-2 font-italic font-weight-bold">
-                            {{title}}
-                        </h3>
-                    </div>
-                    <div class="col-md-4 ">
-                        <div class="float-right m-3">
-                            <a href="{% url 'base:paciente' %}" class="btn btn-warning">
-                                Cancelar
-                            </a>
-                        </div>
-                    </div>
+    <div class="col-sm-6">
+    <div class="card shadow" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            {% if historia.paciente.foto %}
+            <br>
 
-                </div>
-
+                <img src="{{historia.paciente.foto.url}}" class="card-img img-account-profile rounded-circle mb-2" alt="25">
+                {% else %}
+                <img src="{% static 'imagenes/sinimagen.png' %}"  class="card-img img-account-profile rounded-circle mb-2" alt="...">
+                {% endif %}
+            
+          </div>
+          <div class="col-md-8">
+            <div class="card-body shadow">
+              <h5 class="card-title" style="color: blue;">Datos del paciente</h5>
+              <p class="card-text"> Nombre: {{historia.paciente.nombre}} {{historia.paciente.apellido}}
+            </p>
+            <p class="card-text"> Email: {{historia.paciente.email}}
+            </p>
+            <p class="card-text"> Telefono: {{historia.paciente.telefono}}
+            </p>
+            <p class="card-text"> Direccion: {{historia.paciente.direccion}}
+            </p>
+              <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="row">
-                <div class="col-5">
-                    <div class="card mb-3 table-responsive">
-                        <div class=" row no-gutters">
-                            <div class="col-md-4">
-                                {% if historia.paciente.foto %}
-                                <img src="{{historia.paciente.foto.url}}" class="img-thumbnail rounded-circle"
-                                    width="100%">
-
-                                {% else %}
-                                <img src="{% static 'imagenes/sinimagen.png' %}" class="img-thumbnail rounded-circle"
-                                    width="100%">
-                                {% endif %}
-
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">Datos del Paciente</h5>
-                                    <p class="card-text"> {{historia.paciente.nombre}} {{historia.paciente.apellido}}
-                                    </p>
-                                    <p class="card-text"> Email:{{historia.paciente.email}}
-                                    </p>
-                                    <p class="card-text"> Telefono:{{historia.paciente.telefono}}
-                                    </p>
-                                    <p class="card-text"> Direccion:{{historia.paciente.direccion}}
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-
-                                <textarea class="form-control" id="id_notas_internas" placeholder="Notas Internas"
+          </div>
+          <div class="card">
+          <div class="card-body">
+            <h5 class="card-title" style="color: blue;">Notas internas</h5>
+            <p class="card-text" style="color: #FFC107;">Esta nota solo sera visible para llevar un registo personal del médico ...</p>
+            <textarea class="form-control" id="id_notas_internas" placeholder="Notas Internas"
                                     rows="3">{{historia.notasinterna}}</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <table class="table table-hover table-striped  m-1 ">
-                                <thead class="bg-success text-light">
-                                    <tr class="h5">
-                                        <th>Signo Vital</th>
-                                        <th>Valor Tomado</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="delegacion-container" id="contenedor">
-                                    {% for signo in signo_vitales%}
-                                    <tr class="text-justify">
-                                        <td>{{signo.signovital.descripcion}} </td>
-                                        <td>{{signo.valor}} {{signo.signovital.medida}}</td>
+                                    <p>
 
-                                    </tr>
-                                    {% endfor %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="col-7">
-                    <div class="card table-responsive">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form method="POST">
-                                    <div class="form-group row">
-                                        <div class="col-6">
-                                            <select class="form-control" id="id_grupo_antecedente">
-                                                <option selected value="0">Grupo Antecedente</option>
-                                                {% for grupo in lt_grupo_antecedentes %}
-                                                <option value="{{grupo.id}}">{{grupo}}</option>
-                                                {% endfor %}
-
-                                            </select>
-
-                                        </div>
-                                        <div class="col-6">
-                                            <select class="form-control" id="id_antecedente">
-
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <input type="text" class="form-control" id="id_descripcion_antecedente"
-                                                placeholder="Escriba el antecedente">
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-primary btn-block" id="id_registrar_antecedente"
-                                        type="button">Registrar
-                                        Antecedente
-                                    </button>
-
-                                </form>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <table class="table table-hover table-striped  m-1 ">
-                                <thead class="bg-success text-light">
-                                    <tr class="h5">
-                                        <th>Antecedente</th>
-                                        <th>Descripcion</th>
-                                        <th class="text-center">Acciones</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody class="delegacion-container" id="id_contenedor">
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-                </div>
-                <button class="btn btn-primary btn-block" id="id_actualizar" type="button">Actualizar Historia</button>
-
-            </div>
-
+                                    </p>
+            <a href="#" class="btn btn-primary">Registrar notas</a>
+          </div>
         </div>
     </div>
+      </div>
+      <div class="col-xl-11" style="margin-top: 3rem">
+        <!-- Account details card-->
+        <div class="card mb-3 shadow p-0" style="max-width: 540px;">
+            <div class="card-header"><font style="vertical-align: inherit; color: #4E73DF;"><font style="vertical-align: inherit;"><h8 class="card-title" style="color: blue;">Signos vitales</h8></font></font></div>
+            <div class="card-body">
+                   <!-- DataTales Example -->
+ 
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead style="background-color:#2C53C6;">
+                <tr style="color: white;">
+                    <th>Signo Vital</th>
+                    <th>Valor Tomado</th>
+              </thead>
+              <tfoot>
+                <tr>
+                    <th>Signo Vital</th>
+                    <th>Valor Tomado</th>
+                </tr>
+              </tfoot>
+              <tbody id="tabla">
+                {% for signo in signos%}
+                <tr class="text-justify">
+                    <td>{{signo.signovital.descripcion}} </td>
+                    <td>{{signo.valor}} {{signo.signovital.medida}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-header" style="color:#2C53C6;">
+                Antecedentes
+              </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <select class="form-control" id="id_grupo_antecedente">
+                                <option selected value="0">Grupo Antecedente</option>
+                                {% for grupo in lt_grupo_antecedentes %}
+                                <option value="{{grupo.id}}">{{grupo}}</option>
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+                        <div class="col-6">
+                            <select class="form-control" id="id_antecedente">
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="id_descripcion_antecedente"
+                                placeholder="Escriba el antecedente">
+                        </div>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary btn-block" id="id_registrar_antecedente"
+                        type="button">Registrar
+                        Antecedente
+                    </button>
+
+                </form>
+            </div>
+            </div>
+            <div>
+                <p>
+
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-header" style="color:#2C53C6;">
+                    Antecedentes registrados
+                  </div>
+                <div class="card-body">
+                    <table class="table table-hover table-striped  m-1 ">
+                        <thead style="background-color:#2C53C6;">
+                            <tr class="h8" style="color: white;">
+                                <th>Antecedente</th>
+                                <th>Descripcion</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="delegacion-container text-center" id="id_contenedor">
+
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+          </div>
+          <button class="btn btn-primary btn-block" id="id_actualizar" type="button">Actualizar Historia</button>
+
+        
+       
+        
+      </div>
 </div>
 
 {% endblock %}

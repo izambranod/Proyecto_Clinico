@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import fields
-from .models import Paciente, Doctor, Horario, Agenda
+from .models import Paciente, Doctor, Horario, Agenda, SignoVital
 
 
 class PacienteForm(forms.ModelForm):
@@ -265,27 +265,62 @@ class AgendaForm(forms.ModelForm):
         widgets = {
             'paciente': forms.Select(
                 attrs={
-                    'class': 'form-control',
-                    'placeholder': 'Nombre del paciente'
+                    'class': 'form-control'
                 }
             ),
             'fecha': forms.DateInput(
-               format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}
+               attrs={'class':'form-control', 'type':'date'}
             ),
             'hora': forms.TimeInput(
                 attrs= {'class': 'form-control',
-                       'placeholder': 'hh:mm'
+                       'placeholder': 'hh:mm', 'type': 'time'
                 }
             ),
             'motivo': forms.TextInput(
                 attrs= {'class': 'form-control',
-                       'placeholder': 'Motivo de Consulta'
+                       'placeholder': 'Motivo de la consulta'
                 }
             ),
             'estado': forms.CheckboxInput(
-                attrs= {'class': 'form-control',
+                attrs= {'class': 'form-check-input',
                 }      
             ),
 
+        }
+
+class SignoForm(forms.ModelForm):
+    class Meta:
+        model = SignoVital
+        fields = '__all__'
+        widgets = {
+            'descripcion': forms.TextInput (
+                attrs= {
+                    'class': 'form-control', 'placeholder': 'Signo vital'
+                }
+            ),
+            'rango1': forms.NumberInput (
+                attrs= {
+                    'class': 'form-control', 'placeholder': '0.00'
+                }
+            ),
+            'rango2': forms.NumberInput (
+                attrs= {
+                    'class': 'form-control', 'placeholder': '0.00'
+                }
+            ),
+            'medida': forms.TextInput (
+                attrs= {
+                    'class': 'form-control'
+                }
+            ),
+             'imagen': forms.FileInput(
+                 attrs={
+                    'class': 'form-control-file'
+                }
+            ),
+             'estado': forms.CheckboxInput(
+                attrs= {'class': 'form-check-input',
+                }  
+            ),
         }
 

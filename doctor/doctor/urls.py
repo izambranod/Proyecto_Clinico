@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from appbase.views import InicioView, CrearPacienteView
 from django.conf import settings
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', InicioView.as_view(), name='index'),
+    path('index/', InicioView.as_view(), name='index'),
+    path('',LoginView.as_view(template_name='login.html'), name="login"),
+    path('logout/',LogoutView.as_view(),name="logout"),
     path('base/', include('appbase.urls')),
     path('atencion/', include('appconsulta.urls')),
 ]

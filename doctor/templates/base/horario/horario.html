@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block main %}
+{% load static %}
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Horario</h1>
+        
+        <a href="{% url 'base:crear_horario' %}" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm"><i class="fas fa-user-md fa-sm text-white-50"></i> Nuevo registro</a>
+      </div>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de horarios</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Dia</th>
+                <th>Hora de inicio</th>
+                <th>Hora final</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Dia</th>
+                <th>Hora de inicio</th>
+                <th>Hora final</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+            <tbody id="tabla">
+                {% for horario in horarios %}
+                <tr class="text-justify">
+                    <td style="vertical-align: inherit;">{{ horario.dia_semana }}</td>
+                    <td style="vertical-align: inherit;">{{ horario.desde }}</td>
+                    <td style="vertical-align: inherit;">{{ horario.hasta }}</td>
+                    {% if horario.estado %}
+                    <td class="text-center" style="vertical-align: inherit;"><span class="badge badge-pill badge-primary">Habilitado</span></td>
+                    {% else %}
+                    <td class="text-center" style="vertical-align: inherit;"><span class="badge badge-pill badge-danger">Deshabilitado</span></td>
+                    {% endif %}
+                    <td style="vertical-align: inherit;">
+                        <div class="d-flex justify-content-center" 
+                        aria-label=" with button groups">
+                             <div class="btn-group btn-group-sm" role="group" aria-label="First group" >
+                                <a href="{% url 'base:editar_horario' horario.id %}" class="bot btn btn-outline-primary"
+                                  ><i class="far fa-edit"></i><span class="tool"></span></a>
+                               <a href="#" rel="action" data-json='{"action": "elim", "id":"{{ horario.id}}"}'
+                               class="bot btn btn-outline-danger"><i class="far fa-trash-alt"></i><span class="tool"></span></a>
+                              
+                             </div>
+                       </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block frmodal %}
+<!-- inicio formulario Modal para Eliminar -->
+
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="frmEliminar" id="frmEliminar" method="POST" action="{% url 'base:eliminar_horario' 0 %} ">
+                {% csrf_token %}
+                <div class="modal-header bg-primary text-light">
+                    <h3 class="modal-title ml-5 font-weight-bold">Mensaje Del Sistema</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="id" value="">
+                    <input type="hidden" name="action" value="elim">
+                    <div class="h3 text-center">
+                        <label class="text-primary font-weight-bold">Esta Seguro De Eliminar el Horario:</label>
+                        <span class="text-light font-weight-bold badge badge-danger badge-pill"
+                            id="descripcion"></span><br>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Eliminar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Final Formulario Modal-->
+{% endblock %}
+
+{% block jscript %}
+<script>
+    $(function () {
+
+        $('#tabla').on('click', 'a[rel="action"]', function () {
+            let data = $(this).data('json'),
+                action = data.accion,
+                id = data.id;
+            let desc = $(this).parents('tr').children('td').eq(0).html();
+            $('#descripcion').html(desc);
+            $('#frmEliminar #id').val(id);
+            $('#myModal').modal('show');
+            return;
+
+        });
+
+    })
+
+    function convertir() {
+        let titulo = document.getElementById("titulo").innerText
+        document.getElementById("titulo").innerText = titulo.toUpperCase()
+        alert(titulo)
+    }
+</script>
+{% endblock %}

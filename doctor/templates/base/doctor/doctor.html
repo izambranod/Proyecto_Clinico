@@ -2,143 +2,87 @@
 
 {% block main %}
 {% load static %}
-<div class="container-fluid" style="margin-top: 3rem;">
-    <div class="card">
-        <div class="card-header bg-success text-light ">
-            <div class="row">
-                <div class="col-md-8">
-                    <h3 id="titulo" class="font-weight-bold" onclick="convertir()">{{titulo}}</h3>
-                </div>
-                <div class="col-md-4 ">
-                    <a href="{% url 'base:crear_doctor' %}" class="btn btn-primary float-right">Nuevo Registro</a>
-                </div>
+<div class="container-fluid">
 
-            </div>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Doctores</h1>
+        
+        <a href="{% url 'base:crear_doctor' %}" class="d-none d-sm-inline-block btn btn btn-primary shadow-sm"><i class="fas fa-user-md fa-sm text-white-50"></i> Nuevo registro</a>
+      </div>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de doctores</h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nombre del consultorio</th>
+                <th>Dirección</th>
+                <th>Duración</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nombre del consultorio</th>
+                <th>Dirección</th>
+                <th>Duración</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </tfoot>
+            <tbody id="tabla">
+                {% for doctor in doctores %}
+                <tr class="text-justify">
+                    {% if doctor.foto %}
+                    <th><img class="img-thumbnail " width="50px" src="{{ doctor.foto.url }}" alt=""></th>
+                    {% else %}
+                    <td><img src="{% static 'imagenes/sinimagen.jpg' %}"
+                          class="img-thumbnail " width="60px"></td>
+                    {% endif %}
+                    <td style="vertical-align: inherit;">{{ doctor.nombre }}</td>
+                    <td style="vertical-align: inherit;">{{ doctor.apellido }}</td>
+                    <td style="vertical-align: inherit;">{{  doctor.consultorio }}</td>
+                    <td style="vertical-align: inherit;">{{  doctor.lugar }}</td>
+                    <td style="vertical-align: inherit;">{{  doctor.duracion }}</td>
+                    {% if doctor.estado %}
+                    <td class="text-center" style="vertical-align: inherit;"><span class="badge badge-pill badge-primary">Activo</span></td>
+                    {% else %}
+                    <td class="text-center" style="vertical-align: inherit;"><span class="badge badge-pill badge-danger">Pasivo</span></td>
+                    {% endif %}
+
+                    <td style="vertical-align: inherit;">
+                        <div class="d-flex justify-content-center" 
+                        aria-label=" with button groups">
+                             <div class="btn-group btn-group-sm" role="group" aria-label="First group" >
+                                 <a href="{% url 'base:editar_doctor' doctor.id %}" class="bot btn btn-outline-primary"
+                                    ><i class="far fa-edit"></i><span class="tool"></span></a>
+                                 <a href="#" rel="action" data-json='{"action": "elim", "id":"{{ doctor.id}}"}'
+                                 class="bot btn btn-outline-danger"><i class="far fa-trash-alt"></i><span class="tool"></span></a>
+                             </div>
+                       </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="card-body table-responsive">
-
-            <form class="row">
-
-                <div class="col-md-8">
-                    <input class="form-control mr-2 bg-info text-danger font-weight-bold " placeholder="Texto a Buscar"
-                        name="nombre" value={{nombre}}>
-                </div>
-                <div class="col-md-4 ">
-                    <button class="btn btn-primary" type="submit">Buscar</button>
-                </div>
-            </form>
-
-            <div class="row pt-2">
-                <div class="col">
-                    <table class="table table-striped table-hover table-sm  ">
-
-                        <thead>
-                            <tr>
-                                <th class="text-center">Foto</th>
-                                <th class="text-center">Nombre</th>
-                                <th class="text-center">Genero</th>
-                                <th class="text-center">Correo</th>
-                                <th class="text-center">Telefono</th>
-                                <th class="text-center">Ciudad</th>
-                                <th class="text-center">Direccion</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
-
-                        </thead>
-                        <tbody id="tabla">
-                            {% for paciente in pacientes%}
-                            <tr>
-                                {% if paciente.foto %}
-                                <td><img src="{{paciente.foto.url}}" class="img-thumbnail rounded-circle" width="40px">
-                                </td>
-                                {% else %}
-                                <td><img src="{% static 'imagenes/sinimagen.png' %}"
-                                        class="img-thumbnail rounded-circle" width="40px">
-                                </td>
-                                {% endif %}
-
-                                <td><span>{{paciente.nombre}}</span> </td>
-                                {% if paciente.sexo == 'M' %}
-                                <td class="text-center"><span
-                                        class="badge badge-pill badge-success">{{paciente.sexo}}</span>
-                                </td>
-                                {% else %}
-                                <td class="text-center"><span
-                                        class="badge badge-pill badge-danger">{{paciente.sexo}}</span>
-                                </td>
-                                {% endif %}
-
-                                <td>{{paciente.email}}</td>
-                                <td>{{paciente.telefono}}</td>
-                                <td>{{paciente.ciudad}}</td>
-                                <td>{{paciente.direccion}}</td>
-
-                                <td class="text-center"><a class="btn btn-primary btn-sm"
-                                        href="{% url 'base:editar_paciente' paciente.id %}">Editar</a>
-                                <td class="text-center"><a class="btn btn-primary btn-sm"
-                                        href="{% url 'atencion:historia' %}?id_paciente={{paciente.id}}">Historia</a>
-                                    <a rel="action" data-json='{"accion":"elim" ,"id":"{{paciente.id}}"}'
-                                        class="btn btn-danger btn-sm" href="#">Eliminar</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <div class="alert alert-warning alert-dismissible fade show mt-2" role="alert">
-                                <strong>Mensaje del Sistema!</strong> No existen Pacientes registrados
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Menú de paginación -->
-            {% if is_paginated %}
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                    <li class="page-item ">
-                        <a class="page-link"
-                            href="?nombre={{nombre}}&page={{ page_obj.previous_page_number }}">&laquo;</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">&laquo;</a>
-                    </li>
-                    {% endif %}
-                    {% for i in paginator.page_range %}
-                    {% if i <= page_obj.number|add:2 and i >= page_obj.number|add:-2 %}
-                    {% if page_obj.number == i %}
-                    <li class="page-item active" style="pointer-events:none">
-                        <a href="#" class="page-link">{{ forloop.counter }}</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item">
-                        <a href="?page={{ forloop.counter }}{{ url }}" class="page-link">{{ forloop.counter }}</a>
-                    </li>
-                    {% endif %}
-                    {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                    <li class="page-item ">
-                        <a class="page-link" href="?nombre={{nombre}}&page={{ page_obj.next_page_number }}">&raquo;</a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">&raquo;</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            {% endif %}
-            <!-- Fin del pagineo -->
-        </div>
+      </div>
     </div>
 
-
-
-</div>
+  </div>
 {% endblock %}
 
 {% block frmodal %}
@@ -147,7 +91,7 @@
 <div class="modal fade" id="myModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form name="frmEliminar" id="frmEliminar" method="POST" action="{% url 'base:eliminar_paciente' 0 %} ">
+            <form name="frmEliminar" id="frmEliminar" method="POST" action="{% url 'base:eliminar_doctor' 0 %} ">
                 {% csrf_token %}
                 <div class="modal-header bg-primary text-light">
                     <h3 class="modal-title ml-5 font-weight-bold">Mensaje Del Sistema</h3>
@@ -159,7 +103,7 @@
                     <input type="hidden" name="id" id="id" value="">
                     <input type="hidden" name="action" value="elim">
                     <div class="h3 text-center">
-                        <label class="text-primary font-weight-bold">Esta Seguro De Eliminar El Paciente:</label>
+                        <label class="text-primary font-weight-bold">Esta Seguro De Eliminar El Doctor:</label>
                         <span class="text-light font-weight-bold badge badge-danger badge-pill"
                             id="descripcion"></span><br>
 
